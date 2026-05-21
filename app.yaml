@@ -69,7 +69,7 @@ env_variables:
 beta_settings:
   cloud_sql_instances: kuis-arnold-bm6b:asia-southeast2:qardiosis
 
-service_account: qardiosis@appspot.gserviceaccount.com
+service_account: kuis-arnold-bm6b@appspot.gserviceaccount.com
 # automatic_scaling:
 #   min_num_instances: 1
 #   max_num_instances: 15
