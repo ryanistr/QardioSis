@@ -1,12 +1,10 @@
 import datetime
-from distutils.log import debug
 import os
 from zipfile import ZipFile
-from flask import Flask, render_template, redirect, url_for, session, flash, Markup, request
+from flask import Flask, render_template, redirect, url_for, session, flash, request
 from werkzeug.utils import secure_filename
 from forms import RegistrationForm, LoginForm, ResetPassword
 from flask_bcrypt import Bcrypt
-from flask_mysqldb import MySQL
 import pymysql
 import re
 from google.cloud import storage
@@ -20,13 +18,8 @@ from flask_mail import Message, Mail
 from random import *
 
 
-from test import execute
-from generate_cardiac_features_test import execute_generate_features_test
-from diagnosis import diagnosis_stage_1
-# from stage_2_diagnosis import diagnosis_stage_2
-from make_image import *
-from take_data_csv import *
-from delete_input_nifty import *
+# ML modules are intentionally imported lazily inside the upload route so the
+# web app can start locally without TensorFlow/SimpleITK installed.
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(50)
@@ -63,18 +56,38 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_EXTENSIONS'] = ['dcm', 'nii', 'gz', 'zip', 'gzip', 'GZ']
 # ############
 # #Storage Configuration
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'qardiosis-gae.json'
-storage_client = storage.Client()
 bucket_name = os.environ.get('CLOUD_STORAGE_BUCKET_NAME')
-bucket = storage_client.bucket(bucket_name)
+storage_client = None
+bucket = None
+my_bucket = None
+credentials_path = 'qardiosis-gae.json'
 
-my_bucket = storage_client.get_bucket(bucket_name)
+if os.path.exists(credentials_path):
+    os.environ.setdefault('GOOGLE_APPLICATION_CREDENTIALS', credentials_path)
+
+if bucket_name:
+    try:
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        my_bucket = storage_client.get_bucket(bucket_name)
+    except Exception as e:
+        print('Cloud Storage is not available locally')
+        print(e)
 
 
 def conf():
     # When deployed to App Engine, the `GAE_ENV` environment variable will be
     # set to `standard`
+    if not all([db_user, db_password, db_name, db_connection_name]):
+        print('Cloud SQL is not configured')
+        return None
+
     try:
+        db_host = os.environ.get('CLOUD_SQL_HOST')
+        if db_host:
+            return pymysql.connect(user=db_user, password=db_password,
+                              host=db_host, port=int(os.environ.get('CLOUD_SQL_PORT', 3306)), db=db_name)
+
         # if os.environ.get('GAE_ENV') == 'flex':
             # If deployed, use the local socket interface for accessing Cloud SQL
         unix_socket = '/cloudsql/{}'.format(db_connection_name)
@@ -477,6 +490,13 @@ def uploadimage():
                             else:
                                 print("bad request")
                         ##Machine learning
+                        from test import execute
+                        from generate_cardiac_features_test import execute_generate_features_test
+                        from diagnosis import diagnosis_stage_1
+                        from make_image import make_4D_raw, make_4D_GT
+                        from take_data_csv import take_data
+                        from delete_input_nifty import delete_nifty_input
+
                         start_time_global = time.time()
                         start_time_1 = time.time()
                         execute()
