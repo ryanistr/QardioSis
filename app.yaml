@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: python27
+runtime: python312
 entrypoint: gunicorn -b :$PORT main:app
 
 #runtime_config:
@@ -62,13 +62,12 @@ env_variables:
   CLOUD_SQL_PASSWORD: 'arnold123'
   CLOUD_SQL_DATABASE_NAME: 'qardiosis_db'
   CLOUD_SQL_CONNECTION_NAME: 'kuis-arnold-bm6b:asia-southeast2:qardiosis'
-
   CLOUD_STORAGE_BUCKET_NAME: 'bucket-arnold-bm6b'
 
-beta_settings:
-  cloud_sql_instances: kuis-arnold-bm6b:asia-southeast2:qardiosis
+#beta_settings:
+#  cloud_sql_instances: kuis-arnold-bm6b:asia-southeast2:qardiosis
 
-service_account: kuis-arnold-bm6b@appspot.gserviceaccount.com
+#service_account: kuis-arnold-bm6b@appspot.gserviceaccount.com
 # automatic_scaling:
 #   min_num_instances: 1
 #   max_num_instances: 15
