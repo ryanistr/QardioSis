@@ -4,7 +4,7 @@ USE `qardiosis_db`;
 --
 -- Host: 34.101.186.23    Database: qardiosis_db
 -- ------------------------------------------------------
--- Server version	8.0.26-google
+-- Server version 8.0.26-google
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,14 +16,15 @@ USE `qardiosis_db`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-/*SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
-SET @@SESSION.SQL_LOG_BIN= 0;
-*/
+
+-- SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+-- SET @@SESSION.SQL_LOG_BIN= 0;
+
 --
 -- GTID state at the beginning of the backup 
 --
 
-/* SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '3416556a-1c74-11ed-9beb-42010a5ef102:1-36442'*/;
+-- SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '3416556a-1c74-11ed-9beb-42010a5ef102:1-36442';
 
 --
 -- Table structure for table `user`
@@ -47,7 +48,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `medical_number` (`medical_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/* SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN; */;
+-- SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
